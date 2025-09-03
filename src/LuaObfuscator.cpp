@@ -49,9 +49,24 @@ bool LuaObfuscator::saveToFile(const std::string& filename) {
 
 void LuaObfuscator::obfuscate(bool useStrings, bool useJunk, bool useVM) {
     try {
-        useStrings = useStrings && config.getBoolValue("Strings", "enabled", false);
-        useJunk = useJunk && config.getBoolValue("Junk", "enabled", false);
-        useVM = useVM && config.getBoolValue("VM", "enabled", false);
+        // Override configuration if --all flag is used
+        if (useStrings) {
+            Logger::debug("Overriding config: Enabling string encryption");
+        } else {
+            useStrings = config.getBoolValue("Strings", "enabled", false);
+        }
+
+        if (useJunk) {
+            Logger::debug("Overriding config: Enabling junk code generation");
+        } else {
+            useJunk = config.getBoolValue("Junk", "enabled", false);
+        }
+
+        if (useVM) {
+            Logger::debug("Overriding config: Enabling VM protection");
+        } else {
+            useVM = config.getBoolValue("VM", "enabled", false);
+        }
 
         if (useStrings) {
             size_t chunkSize = config.getIntValue("Encryption", "chunk_size", 20);
@@ -114,4 +129,4 @@ int LuaObfuscator::getConfigInt(const std::string& section, const std::string& k
 
 std::string LuaObfuscator::getConfigString(const std::string& section, const std::string& key, const std::string& defaultValue) const {
     return config.getValue(section, key, defaultValue);
-} 
+}

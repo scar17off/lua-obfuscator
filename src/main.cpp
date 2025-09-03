@@ -30,7 +30,7 @@ void printUsage() {
 
 int main(int argc, char* argv[]) {
     if (argc < 4) {
-        std::cout << "Usage: " << argv[0] << " obfuscate <input_file> <output_file> [--all] [--strings] [--junk] [--vm]\n";
+        printUsage();
         return 1;
     }
 
